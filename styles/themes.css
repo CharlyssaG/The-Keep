@@ -1,0 +1,189 @@
+/* =========================================================================
+   PER-THEME CSS VARIABLES
+   Each theme sets its own tokens; components read from var(--*) so they
+   restyle automatically when <body data-theme="..."> changes.
+   ========================================================================= */
+
+/* Font imports for all themes. Loaded once; each theme uses what it needs. */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IM+Fell+English+SC&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600;700&family=VT323&family=Space+Mono:wght@400;700&family=Orbitron:wght@500;700;900&family=Creepster&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Nosifer&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Poiret+One&family=Fredoka:wght@400;500;600&family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap');
+
+/* =======================================================================
+   NEUTRAL / LOGIN  — clean, unopinionated
+   ======================================================================= */
+[data-theme="neutral"] {
+  --bg: #f7f3ec;
+  --surface: #ffffff;
+  --surface-2: #f2ede3;
+  --ink: #2a2520;
+  --ink-soft: #6b6258;
+  --accent: #3d3530;
+  --accent-2: #8a7a5c;
+  --danger: #a13b2a;
+  --success: #3a6a3a;
+  --border: #d9d1c2;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --texture: none;
+  --bg-overlay: radial-gradient(ellipse at 50% 0%, rgba(200, 180, 140, 0.15), transparent 70%);
+}
+
+/* =======================================================================
+   DND  — parchment, burgundy, gold (Charlyssa)
+   ======================================================================= */
+[data-theme="dnd"] {
+  --bg: #e8dcc0;
+  --surface: #f0e4ca;
+  --surface-2: #dccda7;
+  --ink: #2a1810;
+  --ink-soft: #5a4030;
+  --accent: #5a1a1a;
+  --accent-2: #a88530;
+  --accent-3: #c9a548;
+  --danger: #7a2222;
+  --success: #2d4a2b;
+  --border: #b8a67e;
+  --radius: 2px;
+  --radius-lg: 4px;
+  --font-display: 'Cinzel Decorative', serif;
+  --font-body: 'EB Garamond', Georgia, serif;
+  --font-mono: 'IM Fell English SC', serif;
+  --texture:
+    repeating-linear-gradient(45deg, rgba(90,60,30,0.03) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, rgba(42,24,16,0.02) 0 1px, transparent 1px 3px);
+  --bg-overlay:
+    radial-gradient(ellipse at 20% 30%, rgba(138,100,50,0.12), transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(90,26,26,0.12), transparent 50%);
+}
+
+/* =======================================================================
+   ALIEN  — retro CRT-green phosphor on space-grey (Jamie)
+   ======================================================================= */
+[data-theme="alien"] {
+  --bg: #0d1410;
+  --surface: #131e17;
+  --surface-2: #1a2820;
+  --ink: #9dffb0;
+  --ink-soft: #5a8a65;
+  --accent: #4affb0;
+  --accent-2: #a8a8a8;
+  --accent-3: #ccff00;
+  --danger: #ff5a5a;
+  --success: #4affb0;
+  --border: #2a4a35;
+  --radius: 0px;
+  --radius-lg: 2px;
+  --font-display: 'Orbitron', 'Space Mono', monospace;
+  --font-body: 'Space Mono', monospace;
+  --font-mono: 'VT323', 'Courier New', monospace;
+  --texture-opacity: 0.4;
+  --texture:
+    repeating-linear-gradient(0deg, rgba(74,255,176,0.04) 0 1px, transparent 1px 3px);
+  --bg-overlay:
+    radial-gradient(ellipse at 50% 0%, rgba(74,255,176,0.12), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(170,200,170,0.08), transparent 60%);
+}
+
+[data-theme="alien"] .display,
+[data-theme="alien"] h1,
+[data-theme="alien"] h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 12px rgba(74,255,176,0.5);
+}
+
+/* =======================================================================
+   HORROR  — desaturated bone & blood (Jalex)
+   ======================================================================= */
+[data-theme="horror"] {
+  --bg: #0e0c0c;
+  --surface: #181515;
+  --surface-2: #221d1d;
+  --ink: #e8e0d4;
+  --ink-soft: #8a7e72;
+  --accent: #8a1a1a;
+  --accent-2: #b8431f;
+  --accent-3: #d4c8a8;
+  --danger: #c9302c;
+  --success: #6a7a4a;
+  --border: #322828;
+  --radius: 2px;
+  --radius-lg: 4px;
+  --font-display: 'Nosifer', 'Creepster', serif;
+  --font-body: 'Crimson Text', Georgia, serif;
+  --font-mono: 'Crimson Text', monospace;
+  --texture:
+    radial-gradient(circle at 30% 20%, rgba(138,26,26,0.08), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(232,224,212,0.015) 0 1px, transparent 1px 2px);
+  --bg-overlay:
+    radial-gradient(ellipse at center, transparent 30%, rgba(14,12,12,0.8) 100%);
+}
+
+[data-theme="horror"] .display {
+  letter-spacing: 0.02em;
+}
+
+/* =======================================================================
+   MARQUEE  — gilded musical theater (Kelly)
+   ======================================================================= */
+[data-theme="marquee"] {
+  --bg: #1a0620;
+  --surface: #2a0a38;
+  --surface-2: #3d0e50;
+  --ink: #ffe4a8;
+  --ink-soft: #d8a8c8;
+  --accent: #ff4fa3;
+  --accent-2: #ffd24f;
+  --accent-3: #ff8fc8;
+  --danger: #ff3355;
+  --success: #4affb8;
+  --border: #6a1a6a;
+  --radius: 6px;
+  --radius-lg: 14px;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Poiret One', 'Playfair Display', serif;
+  --font-mono: 'Playfair Display', serif;
+  --texture: none;
+  --bg-overlay:
+    radial-gradient(ellipse at 20% 10%, rgba(255,210,79,0.18), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(255,79,163,0.18), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,143,200,0.06), transparent 60%);
+}
+
+[data-theme="marquee"] .display {
+  text-shadow:
+    0 0 8px rgba(255,210,79,0.5),
+    0 0 20px rgba(255,79,163,0.3);
+}
+
+/* =======================================================================
+   COZY  — warm honey & cream (Janiya)
+   ======================================================================= */
+[data-theme="cozy"] {
+  --bg: #fdf5e6;
+  --surface: #fff9ef;
+  --surface-2: #fbecd0;
+  --ink: #5a3a1a;
+  --ink-soft: #8a6a48;
+  --accent: #d88a30;
+  --accent-2: #c66848;
+  --accent-3: #8aa864;
+  --danger: #c66848;
+  --success: #8aa864;
+  --border: #e8d4a8;
+  --radius: 18px;
+  --radius-lg: 28px;
+  --font-display: 'Fredoka', 'Quicksand', sans-serif;
+  --font-body: 'Nunito', 'Quicksand', sans-serif;
+  --font-mono: 'Quicksand', sans-serif;
+  --texture: none;
+  --bg-overlay:
+    radial-gradient(ellipse at 20% 20%, rgba(216,138,48,0.15), transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(138,168,100,0.12), transparent 50%);
+}
+
+[data-theme="cozy"] .display {
+  letter-spacing: -0.01em;
+}

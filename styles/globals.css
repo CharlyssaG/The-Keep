@@ -1,0 +1,69 @@
+@import './themes.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Defaults (neutral theme baseline) — individual themes override in themes.css */
+  --bg: #f7f3ec;
+  --surface: #ffffff;
+  --surface-2: #f0ebe1;
+  --ink: #2a2520;
+  --ink-soft: #6b6258;
+  --accent: #2a2520;
+  --accent-2: #7a6a4a;
+  --danger: #a13b2a;
+  --success: #3a6a3a;
+  --border: #d9d1c2;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --texture: none;
+  --bg-overlay: none;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  background-image: var(--bg-overlay);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: var(--texture);
+  opacity: var(--texture-opacity, 1);
+}
+
+.app-root {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Utility classes shared across themes */
+.display { font-family: var(--font-display); }
+.mono { font-family: var(--font-mono); }
+
+/* Clean scrollbars */
+.content-scroll::-webkit-scrollbar { width: 6px; }
+.content-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
