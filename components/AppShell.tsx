@@ -74,6 +74,7 @@ export default function AppShell({
   const navItems = [
     { href: '/app/tasks',         label: theme.copy.tasks,         icon: tasksIcon(profile.theme) },
     { href: '/app/kitchen',       label: theme.copy.inventory,     icon: kitchenIcon(profile.theme) },
+    { href: '/app/shopping',      label: theme.copy.shopping,      icon: shoppingIcon(profile.theme) },
     { href: '/app/recipes',       label: theme.copy.recipes,       icon: recipesIcon(profile.theme) },
     { href: '/app/notifications', label: theme.copy.notifications, icon: notifIcon(profile.theme) },
   ];
@@ -186,12 +187,14 @@ function Header({ profile, theme }: { profile: Profile; theme: ReturnType<typeof
 // Theme-aware nav icons (simple glyphs, readable at any size).
 // Typed as Partial so the 'neutral' theme safely falls through to the default.
 type IconSet = Partial<Record<ThemeId, string>>;
-const TASKS_ICONS:   IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦' };
-const KITCHEN_ICONS: IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯' };
-const RECIPE_ICONS:  IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖' };
-const NOTIF_ICONS:   IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉' };
+const TASKS_ICONS:    IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦' };
+const KITCHEN_ICONS:  IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯' };
+const SHOPPING_ICONS: IconSet = { dnd: '⚖', alien: '⊞', horror: '☗', marquee: '🎭', cozy: '🧺' };
+const RECIPE_ICONS:   IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖' };
+const NOTIF_ICONS:    IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉' };
 
-function tasksIcon(t: string)   { return TASKS_ICONS[t as ThemeId]   ?? '✓'; }
-function kitchenIcon(t: string) { return KITCHEN_ICONS[t as ThemeId] ?? '◉'; }
-function recipesIcon(t: string) { return RECIPE_ICONS[t as ThemeId]  ?? '❖'; }
-function notifIcon(t: string)   { return NOTIF_ICONS[t as ThemeId]   ?? '●'; }
+function tasksIcon(t: string)    { return TASKS_ICONS[t as ThemeId]    ?? '✓'; }
+function kitchenIcon(t: string)  { return KITCHEN_ICONS[t as ThemeId]  ?? '◉'; }
+function shoppingIcon(t: string) { return SHOPPING_ICONS[t as ThemeId] ?? '🛒'; }
+function recipesIcon(t: string)  { return RECIPE_ICONS[t as ThemeId]   ?? '❖'; }
+function notifIcon(t: string)    { return NOTIF_ICONS[t as ThemeId]    ?? '●'; }
