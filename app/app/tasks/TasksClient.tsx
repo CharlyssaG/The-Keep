@@ -51,7 +51,7 @@ export default function TasksClient({ initialTasks, members }: { initialTasks: T
     const newLevel = Math.floor(newXp / 400) + 1;
     await supabase
       .from('profiles')
-      .update({ xp: newXp, gold: newGold, level: newLevel })
+      .update({ xp: newXp, gold: newGold, level: newLevel } as any)
       .eq('id', profile.id);
 
     toast(theme.copy.completedToast(t.xp_reward || 0, Number(t.gold_reward || 0)));
