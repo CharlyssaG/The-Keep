@@ -45,7 +45,7 @@ export default function KitchenClient({
     const newQty = Math.max(0, Number(item.quantity) + delta);
     const { error } = await supabase
       .from('inventory_items')
-      .update({ quantity: newQty, updated_at: new Date().toISOString(), updated_by: profile.id })
+      .update({ quantity: newQty, updated_at: new Date().toISOString(), updated_by: profile.id } as any)
       .eq('id', item.id);
     if (error) toast(error.message);
     // Trigger low-stock notification when we cross threshold
