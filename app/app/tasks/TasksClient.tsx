@@ -41,7 +41,7 @@ export default function TasksClient({ initialTasks, members }: { initialTasks: T
   async function completeTask(t: TaskRow) {
     const { error } = await supabase
       .from('tasks')
-      .update({ completed_at: new Date().toISOString(), completed_by: profile.id })
+      .update({ completed_at: new Date().toISOString(), completed_by: profile.id } as any)
       .eq('id', t.id);
     if (error) { toast(error.message); return; }
 
