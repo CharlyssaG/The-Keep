@@ -31,7 +31,7 @@ export default function NotificationsClient({
   }, [supabase]);
 
   async function markRead(id: string) {
-    await supabase.from('notifications').update({ read_at: new Date().toISOString() }).eq('id', id);
+    await supabase.from('notifications').update({ read_at: new Date().toISOString() } as any).eq('id', id);
   }
 
   async function send(form: FormData) {
