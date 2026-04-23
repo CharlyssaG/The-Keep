@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useApp } from '@/components/AppShell';
 
-type Category = { id: string; name: string; sort_order: number; household_id: string };
+type Category = { id: string; name: string; sort_order: number; household_id: string; storage_location: string };
 type Item = {
   id: string;
   household_id: string;
@@ -24,6 +24,7 @@ export default function KitchenClient({
   const [items, setItems] = useState<Item[]>(initialItems);
   const [search, setSearch] = useState('');
   const [showAdd, setShowAdd] = useState(false);
+  const [locationFilter, setLocationFilter] = useState<'all' | 'fridge' | 'freezer' | 'pantry'>('all');
 
   useEffect(() => {
     const channel = supabase
@@ -86,6 +87,37 @@ export default function KitchenClient({
     }
   }
 
+  // "Add to grocery list" button — works even if item isn't yet depleted.
+  // Dedupes: if the item is already on the open list, just toast.
+  async function addToShoppingList(item: Item) {
+    const { data: existing } = await supabase
+      .from('shopping_list')
+      .select('id')
+      .eq('source_item_id', item.id)
+      .is('checked_at', null)
+      .maybeSingle();
+    if (existing) {
+      toast(`${item.name} is already on the list`);
+      return;
+    }
+    const { data: cat } = await supabase
+      .from('inventory_categories')
+      .select('name')
+      .eq('id', item.category_id ?? '')
+      .maybeSingle();
+    const { error } = await supabase.from('shopping_list').insert({
+      household_id: profile.household_id,
+      item_name: item.name,
+      quantity: item.unit || '',
+      notes: '',
+      added_by: profile.id,
+      source_item_id: item.id,
+      category: cat?.name || '',
+    } as any);
+    if (error) { toast(error.message); return; }
+    toast(`Added ${item.name} to list`);
+  }
+
   async function addItem(form: FormData) {
     const payload = {
       household_id: profile.household_id,
@@ -105,6 +137,28 @@ export default function KitchenClient({
     <div>
       <SectionHeading title={theme.copy.inventory} subtitle={theme.copy.inventorySubtitle} ornament={theme.copy.ornament} />
 
+      <div className="flex gap-1.5 mb-3 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        {(['all', 'fridge', 'freezer', 'pantry'] as const).map((loc) => {
+          const active = locationFilter === loc;
+          return (
+            <button
+              key={loc}
+              onClick={() => setLocationFilter(loc)}
+              className="px-3 py-1.5 text-[11px] uppercase tracking-wider whitespace-nowrap transition"
+              style={{
+                background: active ? 'var(--accent)' : 'var(--surface)',
+                color: active ? 'var(--surface)' : 'var(--ink-soft)',
+                border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+                borderRadius: 'var(--radius)',
+                fontFamily: 'var(--font-mono)',
+              }}
+            >
+              {theme.copy.storage[loc]}
+            </button>
+          );
+        })}
+      </div>
+
       <input
         type="text"
         value={search}
@@ -120,7 +174,9 @@ export default function KitchenClient({
         }}
       />
 
-      {categories.map((cat) => {
+      {categories
+        .filter((cat) => locationFilter === 'all' || cat.storage_location === locationFilter)
+        .map((cat) => {
         const catItems = filtered.filter((i) => i.category_id === cat.id);
         if (catItems.length === 0) return null;
         return (
@@ -137,7 +193,12 @@ export default function KitchenClient({
             </div>
             <div className="space-y-1.5">
               {catItems.map((item) => (
-                <ItemRow key={item.id} item={item} onChange={(d) => changeQty(item, d)} />
+                <ItemRow
+                  key={item.id}
+                  item={item}
+                  onChange={(d) => changeQty(item, d)}
+                  onAddToList={() => addToShoppingList(item)}
+                />
               ))}
             </div>
           </div>
@@ -169,7 +230,15 @@ export default function KitchenClient({
   );
 }
 
-function ItemRow({ item, onChange }: { item: Item; onChange: (delta: number) => void }) {
+function ItemRow({
+  item,
+  onChange,
+  onAddToList,
+}: {
+  item: Item;
+  onChange: (delta: number) => void;
+  onAddToList: () => void;
+}) {
   const { theme } = useApp();
   const low = item.quantity <= item.low_threshold;
   const depleted = item.quantity === 0;
@@ -198,6 +267,21 @@ function ItemRow({ item, onChange }: { item: Item; onChange: (delta: number) => 
       </div>
 
       <div className="flex items-center gap-2">
+        <button
+          onClick={onAddToList}
+          className="h-8 px-2.5 text-[10px] uppercase tracking-wider flex items-center gap-1 font-semibold"
+          style={{
+            background: 'transparent',
+            color: 'var(--accent-2)',
+            border: '1px solid var(--accent-2)',
+            borderRadius: 'var(--radius)',
+            fontFamily: 'var(--font-mono)',
+          }}
+          title="Add to shopping list"
+        >
+          <span style={{ fontSize: '0.9rem' }}>🛒</span>
+          <span className="hidden sm:inline">{theme.copy.addToShoppingAction}</span>
+        </button>
         <button
           onClick={() => onChange(-1)}
           className="w-8 h-8 rounded-full flex items-center justify-center font-bold"
