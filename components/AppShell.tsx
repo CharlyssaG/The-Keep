@@ -183,8 +183,15 @@ function Header({ profile, theme }: { profile: Profile; theme: ReturnType<typeof
   );
 }
 
-// Theme-aware nav icons (simple glyphs, readable at any size)
-function tasksIcon(t: string)  { return { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦' }[t as ThemeId] ?? '✓'; }
-function kitchenIcon(t: string){ return { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯' }[t as ThemeId] ?? '◉'; }
-function recipesIcon(t: string){ return { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖' }[t as ThemeId] ?? '❖'; }
-function notifIcon(t: string)  { return { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉' }[t as ThemeId] ?? '●'; }
+// Theme-aware nav icons (simple glyphs, readable at any size).
+// Typed as Partial so the 'neutral' theme safely falls through to the default.
+type IconSet = Partial<Record<ThemeId, string>>;
+const TASKS_ICONS:   IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦' };
+const KITCHEN_ICONS: IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯' };
+const RECIPE_ICONS:  IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖' };
+const NOTIF_ICONS:   IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉' };
+
+function tasksIcon(t: string)   { return TASKS_ICONS[t as ThemeId]   ?? '✓'; }
+function kitchenIcon(t: string) { return KITCHEN_ICONS[t as ThemeId] ?? '◉'; }
+function recipesIcon(t: string) { return RECIPE_ICONS[t as ThemeId]  ?? '❖'; }
+function notifIcon(t: string)   { return NOTIF_ICONS[t as ThemeId]   ?? '●'; }
