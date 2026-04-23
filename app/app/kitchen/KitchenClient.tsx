@@ -58,6 +58,31 @@ export default function KitchenClient({
         body: `${profile.display_name} used the last of the ${item.name}.`,
         kind: 'inventory',
       } as any);
+
+      // Auto-add to shopping list — but only if not already on the open list
+      const { data: existing } = await supabase
+        .from('shopping_list')
+        .select('id')
+        .eq('source_item_id', item.id)
+        .is('checked_at', null)
+        .maybeSingle();
+      if (!existing) {
+        // Look up category name for the label
+        const { data: cat } = await supabase
+          .from('inventory_categories')
+          .select('name')
+          .eq('id', item.category_id ?? '')
+          .maybeSingle();
+        await supabase.from('shopping_list').insert({
+          household_id: profile.household_id,
+          item_name: item.name,
+          quantity: item.unit || '',
+          notes: '',
+          added_by: profile.id,
+          source_item_id: item.id,
+          category: cat?.name || '',
+        } as any);
+      }
     }
   }
 
