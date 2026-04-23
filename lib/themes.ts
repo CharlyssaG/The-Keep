@@ -37,6 +37,13 @@ export type ThemeCopy = {
   aiSuggest: string;             // button: "What can I make?"
   aiSuggestSubtitle: string;
   aiThinking: string;
+  storage: {                     // filter chip labels (all / fridge / freezer / pantry)
+    all: string;
+    fridge: string;
+    freezer: string;
+    pantry: string;
+  };
+  addToShoppingAction: string;   // short label for the in-kitchen "add to list" button
   xpLabel: string;           // e.g. "XP" or "SIGNAL"
   goldLabel: string;         // e.g. "GP" or "CREDITS" or "HONEY"
   levelLabel: string;
@@ -84,6 +91,8 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       aiSuggest: 'What can I make?',
       aiSuggestSubtitle: 'based on what you have',
       aiThinking: 'Thinking…',
+      storage: { all: 'All', fridge: 'Fridge', freezer: 'Freezer', pantry: 'Pantry' },
+      addToShoppingAction: 'List',
       xpLabel: 'XP',
       goldLabel: 'Coin',
       levelLabel: 'Lv',
@@ -126,6 +135,8 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       aiSuggest: 'Consult the Tome',
       aiSuggestSubtitle: 'the oracle reveals what may be cooked',
       aiThinking: 'The oracle ponders…',
+      storage: { all: 'All Stores', fridge: 'The Coldhold', freezer: 'The Ice Vault', pantry: 'The Larder' },
+      addToShoppingAction: 'To Market',
       xpLabel: 'XP',
       goldLabel: 'GP',
       levelLabel: 'Lv',
@@ -168,6 +179,8 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       aiSuggest: 'Run Synthesis',
       aiSuggestSubtitle: '// compute viable meal protocols',
       aiThinking: '// PROCESSING…',
+      storage: { all: 'ALL BAYS', fridge: 'COLD BAY', freezer: 'CRYO BAY', pantry: 'DRY BAY' },
+      addToShoppingAction: 'Queue',
       xpLabel: 'SIG',
       goldLabel: 'CRD',
       levelLabel: 'RANK',
@@ -210,6 +223,8 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       aiSuggest: 'Read the Grimoire',
       aiSuggestSubtitle: 'the book shows what the pantry allows',
       aiThinking: 'The grimoire turns its pages…',
+      storage: { all: 'All', fridge: 'The Cold Room', freezer: 'The Deep Chill', pantry: 'The Cellar' },
+      addToShoppingAction: 'Errand',
       xpLabel: 'Dread',
       goldLabel: 'Coin',
       levelLabel: 'Depth',
@@ -252,6 +267,8 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       aiSuggest: 'Cue the Kitchen',
       aiSuggestSubtitle: 'tonight\'s menu, improvised from the pantry',
       aiThinking: 'The chef is warming up…',
+      storage: { all: 'All Acts', fridge: 'Cold Storage', freezer: 'Deep Freeze', pantry: 'The Wings' },
+      addToShoppingAction: 'Book it',
       xpLabel: 'Stars',
       goldLabel: 'Gold',
       levelLabel: 'Act',
@@ -294,6 +311,8 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       aiSuggest: 'What shall we make?',
       aiSuggestSubtitle: 'ideas from what we already have',
       aiThinking: 'Having a little think…',
+      storage: { all: 'Everywhere', fridge: 'Icebox', freezer: 'Freezer', pantry: 'Cupboards' },
+      addToShoppingAction: 'List it',
       xpLabel: 'Stars',
       goldLabel: 'Honey',
       levelLabel: 'Lv',
