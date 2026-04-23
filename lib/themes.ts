@@ -30,6 +30,13 @@ export type ThemeCopy = {
   notifications: string;
   notificationsSubtitle: string;
   sendNotification: string;
+  shopping: string;              // nav label for shopping list
+  shoppingSubtitle: string;
+  addToShopping: string;
+  shoppingEmpty: string;
+  aiSuggest: string;             // button: "What can I make?"
+  aiSuggestSubtitle: string;
+  aiThinking: string;
   xpLabel: string;           // e.g. "XP" or "SIGNAL"
   goldLabel: string;         // e.g. "GP" or "CREDITS" or "HONEY"
   levelLabel: string;
@@ -70,6 +77,13 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       notifications: 'Alerts',
       notificationsSubtitle: 'news from the house',
       sendNotification: 'Send Alert',
+      shopping: 'Shopping',
+      shoppingSubtitle: 'what we need to buy',
+      addToShopping: 'Add to list',
+      shoppingEmpty: 'Nothing on the list.',
+      aiSuggest: 'What can I make?',
+      aiSuggestSubtitle: 'based on what you have',
+      aiThinking: 'Thinking…',
       xpLabel: 'XP',
       goldLabel: 'Coin',
       levelLabel: 'Lv',
@@ -105,6 +119,13 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       notifications: 'Ravens',
       notificationsSubtitle: 'tidings from across the Keep',
       sendNotification: 'Dispatch Raven',
+      shopping: 'Market',
+      shoppingSubtitle: 'provisions yet to be gathered',
+      addToShopping: 'Add to the list',
+      shoppingEmpty: 'The marketkeeper awaits. No goods listed.',
+      aiSuggest: 'Consult the Tome',
+      aiSuggestSubtitle: 'the oracle reveals what may be cooked',
+      aiThinking: 'The oracle ponders…',
       xpLabel: 'XP',
       goldLabel: 'GP',
       levelLabel: 'Lv',
@@ -140,6 +161,13 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       notifications: 'Transmissions',
       notificationsSubtitle: '// incoming signals from the crew',
       sendNotification: 'Transmit',
+      shopping: 'Resupply',
+      shoppingSubtitle: '// materials to acquire from planetside',
+      addToShopping: 'Queue for resupply',
+      shoppingEmpty: '>> SUPPLY MANIFEST EMPTY',
+      aiSuggest: 'Run Synthesis',
+      aiSuggestSubtitle: '// compute viable meal protocols',
+      aiThinking: '// PROCESSING…',
       xpLabel: 'SIG',
       goldLabel: 'CRD',
       levelLabel: 'RANK',
@@ -175,6 +203,13 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       notifications: 'Whispers',
       notificationsSubtitle: 'what the walls have been saying',
       sendNotification: 'Whisper',
+      shopping: 'The Errands',
+      shoppingSubtitle: 'what the house still needs',
+      addToShopping: 'Add to the list',
+      shoppingEmpty: 'Nothing waiting. For now.',
+      aiSuggest: 'Read the Grimoire',
+      aiSuggestSubtitle: 'the book shows what the pantry allows',
+      aiThinking: 'The grimoire turns its pages…',
       xpLabel: 'Dread',
       goldLabel: 'Coin',
       levelLabel: 'Depth',
@@ -210,6 +245,13 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       notifications: 'Callboard',
       notificationsSubtitle: 'notes from the stage manager',
       sendNotification: 'Post to Callboard',
+      shopping: 'The Shopping Number',
+      shoppingSubtitle: 'what the prop master needs',
+      addToShopping: 'Add to the program',
+      shoppingEmpty: 'The stage is bare — no props to fetch.',
+      aiSuggest: 'Cue the Kitchen',
+      aiSuggestSubtitle: 'tonight\'s menu, improvised from the pantry',
+      aiThinking: 'The chef is warming up…',
       xpLabel: 'Stars',
       goldLabel: 'Gold',
       levelLabel: 'Act',
@@ -245,6 +287,13 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       notifications: 'Notes',
       notificationsSubtitle: 'little notes for the house',
       sendNotification: 'Leave a Note',
+      shopping: 'Shopping',
+      shoppingSubtitle: 'things to fetch from the store',
+      addToShopping: 'Add to the list',
+      shoppingEmpty: 'The list is empty — all tucked in.',
+      aiSuggest: 'What shall we make?',
+      aiSuggestSubtitle: 'ideas from what we already have',
+      aiThinking: 'Having a little think…',
       xpLabel: 'Stars',
       goldLabel: 'Honey',
       levelLabel: 'Lv',

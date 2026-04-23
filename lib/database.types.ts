@@ -380,6 +380,77 @@ export type Database = {
           }
         ];
       };
+      shopping_list: {
+        Row: {
+          id: string;
+          household_id: string;
+          item_name: string;
+          quantity: string;
+          notes: string;
+          added_by: string | null;
+          added_at: string;
+          checked_at: string | null;
+          checked_by: string | null;
+          source_item_id: string | null;
+          category: string;
+        };
+        Insert: {
+          id?: string;
+          household_id: string;
+          item_name: string;
+          quantity?: string;
+          notes?: string;
+          added_by?: string | null;
+          added_at?: string;
+          checked_at?: string | null;
+          checked_by?: string | null;
+          source_item_id?: string | null;
+          category?: string;
+        };
+        Update: {
+          id?: string;
+          household_id?: string;
+          item_name?: string;
+          quantity?: string;
+          notes?: string;
+          added_by?: string | null;
+          added_at?: string;
+          checked_at?: string | null;
+          checked_by?: string | null;
+          source_item_id?: string | null;
+          category?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'shopping_list_household_id_fkey';
+            columns: ['household_id'];
+            isOneToOne: false;
+            referencedRelation: 'households';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'shopping_list_added_by_fkey';
+            columns: ['added_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'shopping_list_checked_by_fkey';
+            columns: ['checked_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'shopping_list_source_item_id_fkey';
+            columns: ['source_item_id'];
+            isOneToOne: false;
+            referencedRelation: 'inventory_items';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
