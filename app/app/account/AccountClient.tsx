@@ -10,7 +10,7 @@ import type { Database } from '@/lib/database.types';
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
 // Order matters — controls the grid order on the account page.
-const THEME_ORDER: ThemeId[] = ['dnd', 'alien', 'horror', 'marquee', 'cozy', 'space', 'oldwest', 'nineties', 'underwater', 'station', 'neutral'];
+const THEME_ORDER: ThemeId[] = ['dnd', 'alien', 'horror', 'marquee', 'cozy', 'space', 'oldwest', 'nineties', 'underwater', 'station', 'barbie', 'neutral'];
 
 // Small flavor descriptor shown under each theme card.
 const THEME_BLURBS: Record<ThemeId, string> = {
@@ -24,6 +24,7 @@ const THEME_BLURBS: Record<ThemeId, string> = {
   nineties:   'GeoCities neon chaos',
   underwater: 'coral reef & bioluminescence',
   station:    'Starfleet bridge command',
+  barbie:     'pastel pink dreamhouse',
   neutral:    'clean and unopinionated',
 };
 
@@ -245,6 +246,7 @@ const SWATCHES: Record<ThemeId, { bg: string; accent: string; accent2: string }>
   nineties:   { bg: '#1a0033', accent: '#ff2bd6', accent2: '#00ffe0' },
   underwater: { bg: '#04323d', accent: '#5eead4', accent2: '#fda4af' },
   station:    { bg: '#0a0d1a', accent: '#ff9933', accent2: '#6a8cff' },
+  barbie:     { bg: '#ffdbe8', accent: '#e91e85', accent2: '#7ac4e8' },
 };
 
 function ThemeSwatch({ themeId }: { themeId: ThemeId }) {
