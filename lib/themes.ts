@@ -8,10 +8,11 @@
 // CSS variable values live in styles/themes.css keyed off data-theme.
 // =========================================================================
 
-export type ThemeId = 'dnd' | 'alien' | 'horror' | 'marquee' | 'cozy' | 'space' | 'oldwest' | 'nineties' | 'underwater' | 'station' | 'neutral';
+export type ThemeId = 'dnd' | 'alien' | 'horror' | 'marquee' | 'cozy' | 'space' | 'oldwest' | 'nineties' | 'underwater' | 'station' | 'barbie' | 'neutral';
 
 export type ThemeCopy = {
   appName: string;
+  home: string;              // nav label for dashboard
   tasks: string;             // plural for nav + headers
   task: string;              // singular
   newTask: string;           // button: "Add Task"
@@ -66,6 +67,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Neutral',
     copy: {
       appName: 'Household',
+      home: 'Home',
       tasks: 'Tasks',
       task: 'Task',
       newTask: 'Add Task',
@@ -110,6 +112,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'D&D',
     copy: {
       appName: 'The Keep',
+      home: 'The Hearth',
       tasks: 'Quests',
       task: 'Quest',
       newTask: 'Inscribe Quest',
@@ -154,6 +157,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Alien Girlie',
     copy: {
       appName: 'MOTHERSHIP',
+      home: 'MAIN BAY',
       tasks: 'Directives',
       task: 'Directive',
       newTask: 'New Directive',
@@ -198,6 +202,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Horror',
     copy: {
       appName: 'The Haunting',
+      home: 'The Foyer',
       tasks: 'Rituals',
       task: 'Ritual',
       newTask: 'Inscribe Ritual',
@@ -242,6 +247,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Marquee',
     copy: {
       appName: 'The Main Stage',
+      home: 'The Overture',
       tasks: 'Showstoppers',
       task: 'Showstopper',
       newTask: 'Add to Billing',
@@ -286,6 +292,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Cozy',
     copy: {
       appName: 'The Little House',
+      home: 'Home',
       tasks: 'Helpful Things',
       task: 'Helpful Thing',
       newTask: 'Add a Helpful Thing',
@@ -329,6 +336,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Cosmic',
     copy: {
       appName: 'The Observatory',
+      home: 'The Bridge',
       tasks: 'Missions',
       task: 'Mission',
       newTask: 'Plot a Mission',
@@ -372,6 +380,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Old West',
     copy: {
       appName: 'The Homestead',
+      home: 'The Porch',
       tasks: 'Chores',
       task: 'Chore',
       newTask: 'Post a Chore',
@@ -415,6 +424,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: '90s',
     copy: {
       appName: 'The Homepage',
+      home: 'Home Sweet Home',
       tasks: 'The List',
       task: 'Thing To Do',
       newTask: '+ ADD NEW !!',
@@ -458,6 +468,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Reef',
     copy: {
       appName: 'The Reef',
+      home: 'The Shore',
       tasks: 'The Current',
       task: 'Current',
       newTask: 'Send a Current',
@@ -501,6 +512,7 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     label: 'Bridge',
     copy: {
       appName: 'The Bridge',
+      home: 'Main Bridge',
       tasks: 'Away Missions',
       task: 'Away Mission',
       newTask: 'Log New Mission',
@@ -536,6 +548,50 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
       tiers: { common: 'Routine', rare: 'Priority', epic: 'Critical', urgent: 'Red Alert' },
       assignee: 'assigned to',
       ornament: '⋆',
+    },
+  },
+
+  barbie: {
+    id: 'barbie',
+    label: 'Barbie',
+    copy: {
+      appName: 'The Dreamhouse',
+      home: 'Home',
+      tasks: 'Plans',
+      task: 'Plan',
+      newTask: 'Add a plan, babe',
+      completeTask: 'Done!',
+      completedToast: (xp, gold) => `💖 Literally iconic · +${xp} glitter · +${gold} Kens`,
+      tasksSubtitle: 'what\'s on the agenda',
+      inventory: 'The Closet',
+      inventorySubtitle: 'everything the Dreamhouse has',
+      searchInventory: 'looking for something cute?',
+      depleted: 'We\'re out 💔',
+      lowStock: 'Running low, hun',
+      recipes: 'The Menu',
+      recipesSubtitle: 'recipes for a girls\' night',
+      allIngredientsPresent: 'We have literally everything',
+      missingIngredients: (n) => `We need ${n} more thing${n === 1 ? '' : 's'}`,
+      notifications: 'The Group Chat',
+      notificationsSubtitle: 'what the girls are saying',
+      sendNotification: 'Send to the girls',
+      shopping: 'The Haul',
+      shoppingSubtitle: 'what we\'re grabbing at Target',
+      addToShopping: 'Add to the haul',
+      shoppingEmpty: 'Nothing on the list — we\'re SET.',
+      aiSuggest: 'What should we make?',
+      aiSuggestSubtitle: 'ideas from what\'s in the Dreamhouse',
+      aiThinking: 'One sec babe…',
+      storage: { all: 'All', fridge: 'Fridge', freezer: 'Freezer', pantry: 'Pantry' },
+      addToShoppingAction: 'Haul',
+      xpLabel: 'Glitter',
+      goldLabel: 'Kens',
+      levelLabel: 'Lv',
+      todayLabel: 'Tonight',
+      filters: { all: 'All', mine: 'Mine', open: 'To do', urgent: 'ASAP', done: 'Done' },
+      tiers: { common: 'Easy', rare: 'A thing', epic: 'The Main Event', urgent: 'ASAP babe' },
+      assignee: 'for',
+      ornament: '✿',
     },
   },
 };
