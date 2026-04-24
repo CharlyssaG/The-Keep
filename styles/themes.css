@@ -249,3 +249,98 @@
 [data-theme="oldwest"] .display {
   letter-spacing: 0.04em;
 }
+
+/* =======================================================================
+   90s  — GeoCities neon, hot pink, cyan, lime
+   ======================================================================= */
+[data-theme="nineties"] {
+  --bg: #1a0033;
+  --surface: #2d0052;
+  --surface-2: #3d1a6b;
+  --ink: #f0ffff;
+  --ink-soft: #c8a2ff;
+  --accent: #ff2bd6;
+  --accent-2: #00ffe0;
+  --accent-3: #baff2b;
+  --danger: #ff4040;
+  --success: #baff2b;
+  --border: #5a2ea0;
+  --radius: 2px;
+  --radius-lg: 4px;
+  --font-display: 'VT323', 'Space Mono', monospace;
+  --font-body: 'Space Mono', 'VT323', monospace;
+  --font-mono: 'VT323', monospace;
+  --texture: none;
+  --bg-overlay:
+    radial-gradient(ellipse at 0% 0%, rgba(255,43,214,0.20), transparent 40%),
+    radial-gradient(ellipse at 100% 100%, rgba(0,255,224,0.18), transparent 40%),
+    radial-gradient(ellipse at 70% 20%, rgba(186,255,43,0.10), transparent 40%);
+}
+
+[data-theme="nineties"] .display {
+  letter-spacing: 0.02em;
+  text-shadow: 2px 2px 0 #00ffe0, -1px -1px 0 #ff2bd6;
+}
+
+/* =======================================================================
+   UNDERWATER  — tranquil reef, bioluminescent teal and coral
+   ======================================================================= */
+[data-theme="underwater"] {
+  --bg: #04323d;
+  --surface: #0a4856;
+  --surface-2: #0f5a6b;
+  --ink: #e6fbfd;
+  --ink-soft: #8bc5d0;
+  --accent: #5eead4;
+  --accent-2: #fda4af;
+  --accent-3: #fde68a;
+  --danger: #fda4af;
+  --success: #5eead4;
+  --border: #1d6a7a;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --font-display: 'Fraunces', 'Playfair Display', serif;
+  --font-body: 'Fraunces', Georgia, serif;
+  --font-mono: 'Space Mono', monospace;
+  --texture: none;
+  --bg-overlay:
+    radial-gradient(ellipse at 30% 20%, rgba(94,234,212,0.18), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(253,164,175,0.14), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(253,230,138,0.06), transparent 40%);
+}
+
+[data-theme="underwater"] .display {
+  letter-spacing: -0.005em;
+  font-style: italic;
+}
+
+/* =======================================================================
+   STATION  — Star Trek bridge, LCARS blues and amber
+   ======================================================================= */
+[data-theme="station"] {
+  --bg: #0a0d1a;
+  --surface: #121829;
+  --surface-2: #1a2138;
+  --ink: #e8eeff;
+  --ink-soft: #8a9ac2;
+  --accent: #ff9933;
+  --accent-2: #6a8cff;
+  --accent-3: #cc99cc;
+  --danger: #ff4040;
+  --success: #99cc99;
+  --border: #2a3452;
+  --radius: 20px;
+  --radius-lg: 28px;
+  --font-display: 'Orbitron', 'Space Mono', monospace;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --texture: none;
+  --bg-overlay:
+    radial-gradient(ellipse at 0% 50%, rgba(255,153,51,0.10), transparent 45%),
+    radial-gradient(ellipse at 100% 50%, rgba(106,140,255,0.14), transparent 45%);
+}
+
+[data-theme="station"] .display {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
