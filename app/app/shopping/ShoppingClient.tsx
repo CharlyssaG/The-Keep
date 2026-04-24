@@ -25,6 +25,8 @@ export default function ShoppingClient({ initialItems }: { initialItems: Shoppin
   const { profile, theme, toast } = useApp();
   const [items, setItems] = useState<ShoppingRow[]>(initialItems);
   const [showAdd, setShowAdd] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [hideDone, setHideDone] = useState(false);
 
   // Realtime updates
   useEffect(() => {
@@ -42,8 +44,14 @@ export default function ShoppingClient({ initialItems }: { initialItems: Shoppin
     return () => { supabase.removeChannel(channel); };
   }, [supabase]);
 
-  const open = items.filter((i) => !i.checked_at);
-  const done = items.filter((i) => !!i.checked_at);
+  const allCategories = Array.from(new Set(items.map((i) => i.category).filter(Boolean))).sort();
+  const visible = items.filter((i) => {
+    if (categoryFilter !== 'all' && i.category !== categoryFilter) return false;
+    if (hideDone && i.checked_at) return false;
+    return true;
+  });
+  const open = visible.filter((i) => !i.checked_at);
+  const done = visible.filter((i) => !!i.checked_at);
 
   async function toggleCheck(row: ShoppingRow) {
     const nowChecked = !row.checked_at;
@@ -111,6 +119,29 @@ export default function ShoppingClient({ initialItems }: { initialItems: Shoppin
   return (
     <div>
       <SectionHeading title={theme.copy.shopping} subtitle={theme.copy.shoppingSubtitle} ornament={theme.copy.ornament} />
+
+      {items.length > 0 && (
+        <div className="mb-3 space-y-2">
+          <div className="flex gap-1.5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            <FilterChip label="All" active={categoryFilter === 'all'} onClick={() => setCategoryFilter('all')} />
+            {allCategories.map((c) => (
+              <FilterChip key={c} label={c} active={categoryFilter === c} onClick={() => setCategoryFilter(c)} />
+            ))}
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={hideDone}
+              onChange={(e) => setHideDone(e.target.checked)}
+              className="w-4 h-4"
+              style={{ accentColor: 'var(--accent)' }}
+            />
+            <span className="text-xs uppercase tracking-wider" style={{ color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>
+              Hide checked-off
+            </span>
+          </label>
+        </div>
+      )}
 
       {open.length === 0 && done.length === 0 ? (
         <div className="text-center py-16 italic" style={{ color: 'var(--ink-soft)' }}>
@@ -305,5 +336,23 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="block text-[11px] uppercase tracking-wider mb-1" style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>{label}</span>
       {children}
     </label>
+  );
+}
+
+function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="px-3 py-1.5 text-[11px] uppercase tracking-wider whitespace-nowrap transition"
+      style={{
+        background: active ? 'var(--accent)' : 'var(--surface)',
+        color: active ? 'var(--surface)' : 'var(--ink-soft)',
+        border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+        borderRadius: 'var(--radius)',
+        fontFamily: 'var(--font-mono)',
+      }}
+    >
+      {label}
+    </button>
   );
 }
