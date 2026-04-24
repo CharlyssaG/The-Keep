@@ -72,6 +72,7 @@ export default function AppShell({
   }, [profile.id, supabase, toast, theme.copy.ornament]);
 
   const navItems = [
+    { href: '/app',               label: theme.copy.home,          icon: homeIcon(profile.theme) },
     { href: '/app/tasks',         label: theme.copy.tasks,         icon: tasksIcon(profile.theme) },
     { href: '/app/kitchen',       label: theme.copy.inventory,     icon: kitchenIcon(profile.theme) },
     { href: '/app/shopping',      label: theme.copy.shopping,      icon: shoppingIcon(profile.theme) },
@@ -96,7 +97,7 @@ export default function AppShell({
         >
           <div className="flex">
             {navItems.map((item) => {
-              const active = pathname.startsWith(item.href);
+              const active = item.href === '/app' ? pathname === '/app' : pathname.startsWith(item.href);
               return (
                 <Link
                   key={item.href}
@@ -186,12 +187,14 @@ function Header({ profile, theme }: { profile: Profile; theme: ReturnType<typeof
 // Theme-aware nav icons (simple glyphs, readable at any size).
 // Typed as Partial so the 'neutral' theme safely falls through to the default.
 type IconSet = Partial<Record<ThemeId, string>>;
-const TASKS_ICONS:    IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦', space: '✦', oldwest: '★', nineties: '✪', underwater: '❀', station: '⋆' };
-const KITCHEN_ICONS:  IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯', space: '◉', oldwest: '🏺', nineties: '▣', underwater: '🐚', station: '◉' };
-const SHOPPING_ICONS: IconSet = { dnd: '⚖', alien: '⊞', horror: '☗', marquee: '🎭', cozy: '🧺', space: '⊕', oldwest: '🛒', nineties: '✚', underwater: '🪸', station: '⊕' };
-const RECIPE_ICONS:   IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖', space: '◎', oldwest: '📜', nineties: '❖', underwater: '🌿', station: '◎' };
-const NOTIF_ICONS:    IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉', space: '⟨⟩', oldwest: '✉', nineties: '✉', underwater: '🌊', station: '◆' };
+const HOME_ICONS:     IconSet = { dnd: '◈', alien: '◎', horror: '♰', marquee: '❖', cozy: '🏡', space: '◯', oldwest: '✧', nineties: '✦', underwater: '🌸', station: '⧫', barbie: '♡' };
+const TASKS_ICONS:    IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦', space: '✦', oldwest: '★', nineties: '✪', underwater: '❀', station: '⋆', barbie: '✿' };
+const KITCHEN_ICONS:  IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯', space: '◉', oldwest: '🏺', nineties: '▣', underwater: '🐚', station: '◉', barbie: '🎀' };
+const SHOPPING_ICONS: IconSet = { dnd: '⚖', alien: '⊞', horror: '☗', marquee: '🎭', cozy: '🧺', space: '⊕', oldwest: '🛒', nineties: '✚', underwater: '🪸', station: '⊕', barbie: '👛' };
+const RECIPE_ICONS:   IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖', space: '◎', oldwest: '📜', nineties: '❖', underwater: '🌿', station: '◎', barbie: '💄' };
+const NOTIF_ICONS:    IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉', space: '⟨⟩', oldwest: '✉', nineties: '✉', underwater: '🌊', station: '◆', barbie: '💌' };
 
+function homeIcon(t: string)     { return HOME_ICONS[t as ThemeId]     ?? '◈'; }
 function tasksIcon(t: string)    { return TASKS_ICONS[t as ThemeId]    ?? '✓'; }
 function kitchenIcon(t: string)  { return KITCHEN_ICONS[t as ThemeId]  ?? '◉'; }
 function shoppingIcon(t: string) { return SHOPPING_ICONS[t as ThemeId] ?? '🛒'; }
