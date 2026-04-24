@@ -10,18 +10,21 @@ import type { Database } from '@/lib/database.types';
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
 // Order matters — controls the grid order on the account page.
-const THEME_ORDER: ThemeId[] = ['dnd', 'alien', 'horror', 'marquee', 'cozy', 'space', 'oldwest', 'neutral'];
+const THEME_ORDER: ThemeId[] = ['dnd', 'alien', 'horror', 'marquee', 'cozy', 'space', 'oldwest', 'nineties', 'underwater', 'station', 'neutral'];
 
 // Small flavor descriptor shown under each theme card.
 const THEME_BLURBS: Record<ThemeId, string> = {
-  dnd:     'parchment & burgundy',
-  alien:   'retro CRT phosphor',
-  horror:  'candlelight & gothic',
-  marquee: 'broadway marquee',
-  cozy:    'honey & hundred-acre wood',
-  space:   'nebula & starlight',
-  oldwest: 'leather & saddle-oil amber',
-  neutral: 'clean and unopinionated',
+  dnd:        'parchment & burgundy',
+  alien:      'retro CRT phosphor',
+  horror:     'candlelight & gothic',
+  marquee:    'broadway marquee',
+  cozy:       'honey & hundred-acre wood',
+  space:      'nebula & starlight',
+  oldwest:    'leather & saddle-oil amber',
+  nineties:   'GeoCities neon chaos',
+  underwater: 'coral reef & bioluminescence',
+  station:    'Starfleet bridge command',
+  neutral:    'clean and unopinionated',
 };
 
 export default function AccountClient({ initialProfile }: { initialProfile: Profile }) {
@@ -231,14 +234,17 @@ function Stat({ label, value }: { label: string; value: string | number }) {
 // Little color swatch for each theme — the actual accent + surface colors
 // hardcoded because CSS vars only apply when that theme is active.
 const SWATCHES: Record<ThemeId, { bg: string; accent: string; accent2: string }> = {
-  neutral: { bg: '#f7f3ec', accent: '#3d3530', accent2: '#8a7a5c' },
-  dnd:     { bg: '#e8dcc0', accent: '#8b2828', accent2: '#c9a23f' },
-  alien:   { bg: '#0a0f0a', accent: '#39ff14', accent2: '#00b4ff' },
-  horror:  { bg: '#18141e', accent: '#8b0000', accent2: '#d4af37' },
-  marquee: { bg: '#1a0a2a', accent: '#ff2d7e', accent2: '#ffd93d' },
-  cozy:    { bg: '#fef6e4', accent: '#d88a30', accent2: '#c66848' },
-  space:   { bg: '#080b1e', accent: '#9d7bff', accent2: '#5ec3e8' },
-  oldwest: { bg: '#3a2817', accent: '#d4952e', accent2: '#a8502a' },
+  neutral:    { bg: '#f7f3ec', accent: '#3d3530', accent2: '#8a7a5c' },
+  dnd:        { bg: '#e8dcc0', accent: '#8b2828', accent2: '#c9a23f' },
+  alien:      { bg: '#0a0f0a', accent: '#39ff14', accent2: '#00b4ff' },
+  horror:     { bg: '#18141e', accent: '#8b0000', accent2: '#d4af37' },
+  marquee:    { bg: '#1a0a2a', accent: '#ff2d7e', accent2: '#ffd93d' },
+  cozy:       { bg: '#fef6e4', accent: '#d88a30', accent2: '#c66848' },
+  space:      { bg: '#080b1e', accent: '#9d7bff', accent2: '#5ec3e8' },
+  oldwest:    { bg: '#3a2817', accent: '#d4952e', accent2: '#a8502a' },
+  nineties:   { bg: '#1a0033', accent: '#ff2bd6', accent2: '#00ffe0' },
+  underwater: { bg: '#04323d', accent: '#5eead4', accent2: '#fda4af' },
+  station:    { bg: '#0a0d1a', accent: '#ff9933', accent2: '#6a8cff' },
 };
 
 function ThemeSwatch({ themeId }: { themeId: ThemeId }) {
