@@ -25,6 +25,8 @@ export default function KitchenClient({
   const [search, setSearch] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [locationFilter, setLocationFilter] = useState<'all' | 'fridge' | 'freezer' | 'pantry'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'low' | 'out'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
   useEffect(() => {
     const channel = supabase
@@ -39,8 +41,14 @@ export default function KitchenClient({
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    return q ? items.filter((i) => i.name.toLowerCase().includes(q)) : items;
-  }, [items, search]);
+    return items.filter((i) => {
+      if (q && !i.name.toLowerCase().includes(q)) return false;
+      if (statusFilter === 'out' && i.quantity !== 0) return false;
+      if (statusFilter === 'low' && !(i.quantity <= i.low_threshold)) return false;
+      if (categoryFilter !== 'all' && i.category_id !== categoryFilter) return false;
+      return true;
+    });
+  }, [items, search, statusFilter, categoryFilter]);
 
   async function changeQty(item: Item, delta: number) {
     const newQty = Math.max(0, Number(item.quantity) + delta);
@@ -157,6 +165,48 @@ export default function KitchenClient({
             </button>
           );
         })}
+      </div>
+
+      <div className="flex gap-1.5 mb-3 items-center">
+        <div className="flex gap-1.5 flex-1 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          {(['all', 'low', 'out'] as const).map((s) => {
+            const active = statusFilter === s;
+            const label = s === 'all' ? 'All' : s === 'low' ? 'Low' : 'Out';
+            return (
+              <button
+                key={s}
+                onClick={() => setStatusFilter(s)}
+                className="px-3 py-1.5 text-[11px] uppercase tracking-wider whitespace-nowrap transition"
+                style={{
+                  background: active ? 'var(--accent-2)' : 'var(--surface)',
+                  color: active ? 'var(--surface)' : 'var(--ink-soft)',
+                  border: `1px solid ${active ? 'var(--accent-2)' : 'var(--border)'}`,
+                  borderRadius: 'var(--radius)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="px-2 py-1.5 text-[11px] uppercase tracking-wider"
+          style={{
+            background: 'var(--surface)',
+            color: 'var(--ink-soft)',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius)',
+            fontFamily: 'var(--font-mono)',
+          }}
+        >
+          <option value="all">All categories</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
+        </select>
       </div>
 
       <input
