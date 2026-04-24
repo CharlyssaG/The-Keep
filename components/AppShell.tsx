@@ -186,11 +186,11 @@ function Header({ profile, theme }: { profile: Profile; theme: ReturnType<typeof
 // Theme-aware nav icons (simple glyphs, readable at any size).
 // Typed as Partial so the 'neutral' theme safely falls through to the default.
 type IconSet = Partial<Record<ThemeId, string>>;
-const TASKS_ICONS:    IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦', space: '✦', oldwest: '★' };
-const KITCHEN_ICONS:  IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯', space: '◉', oldwest: '🏺' };
-const SHOPPING_ICONS: IconSet = { dnd: '⚖', alien: '⊞', horror: '☗', marquee: '🎭', cozy: '🧺', space: '⊕', oldwest: '🛒' };
-const RECIPE_ICONS:   IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖', space: '◎', oldwest: '📜' };
-const NOTIF_ICONS:    IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉', space: '⟨⟩', oldwest: '✉' };
+const TASKS_ICONS:    IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦', space: '✦', oldwest: '★', nineties: '✪', underwater: '❀', station: '⋆' };
+const KITCHEN_ICONS:  IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯', space: '◉', oldwest: '🏺', nineties: '▣', underwater: '🐚', station: '◉' };
+const SHOPPING_ICONS: IconSet = { dnd: '⚖', alien: '⊞', horror: '☗', marquee: '🎭', cozy: '🧺', space: '⊕', oldwest: '🛒', nineties: '✚', underwater: '🪸', station: '⊕' };
+const RECIPE_ICONS:   IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖', space: '◎', oldwest: '📜', nineties: '❖', underwater: '🌿', station: '◎' };
+const NOTIF_ICONS:    IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marquee: '✧', cozy: '✉', space: '⟨⟩', oldwest: '✉', nineties: '✉', underwater: '🌊', station: '◆' };
 
 function tasksIcon(t: string)    { return TASKS_ICONS[t as ThemeId]    ?? '✓'; }
 function kitchenIcon(t: string)  { return KITCHEN_ICONS[t as ThemeId]  ?? '◉'; }
