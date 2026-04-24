@@ -187,3 +187,65 @@
 [data-theme="cozy"] .display {
   letter-spacing: -0.01em;
 }
+
+/* =======================================================================
+   SPACE  — deep indigo, starlight, nebula accents
+   ======================================================================= */
+[data-theme="space"] {
+  --bg: #080b1e;
+  --surface: #121631;
+  --surface-2: #1a1f42;
+  --ink: #e8ecff;
+  --ink-soft: #8b94c4;
+  --accent: #9d7bff;
+  --accent-2: #5ec3e8;
+  --accent-3: #ffd86b;
+  --danger: #ff6b9d;
+  --success: #5ec3e8;
+  --border: #2a315c;
+  --radius: 6px;
+  --radius-lg: 12px;
+  --font-display: 'Orbitron', 'Space Mono', monospace;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Mono', 'VT323', monospace;
+  --texture: none;
+  --bg-overlay:
+    radial-gradient(ellipse at 15% 85%, rgba(157,123,255,0.18), transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(94,195,232,0.14), transparent 55%),
+    radial-gradient(circle at 30% 40%, rgba(255,216,107,0.06), transparent 25%);
+}
+
+[data-theme="space"] .display {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* =======================================================================
+   OLD WEST  — sepia, leather, saddle-oil amber
+   ======================================================================= */
+[data-theme="oldwest"] {
+  --bg: #3a2817;
+  --surface: #4d3620;
+  --surface-2: #5c4128;
+  --ink: #f0e3c8;
+  --ink-soft: #baa485;
+  --accent: #d4952e;
+  --accent-2: #a8502a;
+  --accent-3: #7a9358;
+  --danger: #a8502a;
+  --success: #7a9358;
+  --border: #6b4a2c;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --font-display: 'IM Fell English SC', 'Playfair Display', serif;
+  --font-body: 'Crimson Text', Georgia, serif;
+  --font-mono: 'Space Mono', monospace;
+  --texture: none;
+  --bg-overlay:
+    radial-gradient(ellipse at 50% 0%, rgba(212,149,46,0.15), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(168,80,42,0.12), transparent 60%);
+}
+
+[data-theme="oldwest"] .display {
+  letter-spacing: 0.04em;
+}
