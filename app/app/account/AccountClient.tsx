@@ -10,6 +10,23 @@ import type { Database } from '@/lib/database.types';
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
 // Order matters — controls the grid order on the account page.
+// Hardcoded list of linked apps. To add or change one, edit this array,
+// commit, and redeploy. No DB changes needed.
+const EXTERNAL_LINKS: Array<{ name: string; url: string; tagline: string; icon: string }> = [
+  {
+    name: 'Terran Mandate',
+    url: 'https://terran-mandate-wiki.vercel.app/',
+    tagline: 'UEF field reference wiki',
+    icon: '🛰',
+  },
+  {
+    name: 'Chain Reaction',
+    url: 'https://ripple-pop.vercel.app/',
+    tagline: 'tap-to-pop arcade',
+    icon: '🎮',
+  },
+];
+
 const THEME_ORDER: ThemeId[] = ['dnd', 'alien', 'horror', 'marquee', 'cozy', 'space', 'oldwest', 'nineties', 'underwater', 'station', 'barbie', 'neutral'];
 
 // Small flavor descriptor shown under each theme card.
@@ -174,6 +191,48 @@ export default function AccountClient({ initialProfile }: { initialProfile: Prof
           })}
         </div>
       </section>
+
+      {/* === External apps === */}
+      {EXTERNAL_LINKS.length > 0 && (
+        <section
+          className="p-4 mb-5"
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}
+        >
+          <h3 className="display text-sm uppercase tracking-widest mb-1" style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>
+            Other apps
+          </h3>
+          <p className="text-xs italic mb-3" style={{ color: 'var(--ink-soft)' }}>
+            opens in a new tab
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {EXTERNAL_LINKS.map((link) => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 transition active:scale-[0.97]"
+                style={{
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)',
+                  textDecoration: 'none',
+                  display: 'block',
+                }}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <span style={{ fontSize: '1.4rem' }}>{link.icon}</span>
+                  <span className="display font-bold text-sm" style={{ color: 'var(--ink)' }}>{link.name}</span>
+                  <span className="ml-auto text-xs" style={{ color: 'var(--ink-soft)' }}>↗</span>
+                </div>
+                <div className="text-[11px] italic" style={{ color: 'var(--ink-soft)' }}>
+                  {link.tagline}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* === Stats (read-only) === */}
       <section
