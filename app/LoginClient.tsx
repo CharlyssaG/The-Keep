@@ -4,40 +4,50 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
-type Profile = {
-  id: string;
-  display_name: string;
-  class_name: string | null;
-  theme: string;
-  avatar_glyph: string | null;
-};
-
-export default function LoginClient({ profiles }: { profiles: Profile[] }) {
+// A simple email + password login. Sign-up is not exposed here; new
+// households are onboarded by an admin running the household-setup runbook
+// (see supabase/onboard_new_household.md). After a household member is
+// created, they receive their own email + password and use this form to
+// sign in. Their profile.household_id determines which household's data
+// they see.
+export default function LoginClient() {
   const router = useRouter();
   const supabase = createClient();
-  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [showReset, setShowReset] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setInfo(null);
     setBusy(true);
     try {
-      if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        setError('Check your email to confirm, then sign in.');
-        setMode('signin');
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        router.push('/app');
-        router.refresh();
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      router.push('/app');
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message ?? 'Something went wrong');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handlePasswordReset(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setInfo(null);
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/`,
+      });
+      if (error) throw error;
+      setInfo('Check your email for a reset link.');
     } catch (err: any) {
       setError(err.message ?? 'Something went wrong');
     } finally {
@@ -49,69 +59,44 @@ export default function LoginClient({ profiles }: { profiles: Profile[] }) {
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-ink">
       <div className="w-full max-w-sm">
         <h1
-          className="display text-center text-4xl font-semibold tracking-tight mb-1"
-          style={{ color: 'var(--ink)' }}
+          className="text-center text-5xl tracking-tight mb-1"
+          style={{
+            color: 'var(--ink)',
+            fontFamily: "'Fraunces', 'Cormorant Garamond', Georgia, serif",
+            fontWeight: 400,
+            letterSpacing: '-0.02em',
+          }}
         >
-          Household
+          roost
         </h1>
+        <p
+          className="text-center text-xs italic mb-6"
+          style={{
+            color: 'var(--ink-soft)',
+            fontFamily: "'Fraunces', 'Cormorant Garamond', Georgia, serif",
+            letterSpacing: '0.01em',
+          }}
+        >
+          for the people who share your roof
+        </p>
         <p className="text-center text-sm text-ink-soft mb-8">
-          {selectedProfile ? `Signing in as ${selectedProfile.display_name}` : 'Choose who you are'}
+          {showReset ? 'reset your password' : 'welcome back'}
         </p>
 
-        {!selectedProfile && profiles.length > 0 && (
-          <div className="space-y-2">
-            {profiles.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => setSelectedProfile(p)}
-                className="w-full flex items-center gap-4 p-4 bg-surface border border-border rounded-lg hover:bg-surface-2 active:scale-[0.99] transition text-left"
-              >
-                <div
-                  className="w-11 h-11 rounded-full flex items-center justify-center font-semibold display text-lg"
-                  style={{ background: 'var(--accent)', color: 'var(--surface)' }}
-                >
-                  {p.avatar_glyph || p.display_name[0]}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-ink">{p.display_name}</div>
-                  {p.class_name && (
-                    <div className="text-sm text-ink-soft truncate">{p.class_name}</div>
-                  )}
-                </div>
-                <div className="text-ink-soft">→</div>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {!selectedProfile && profiles.length === 0 && (
-          <div className="bg-surface border border-border rounded-lg p-6">
-            <p className="text-sm text-ink-soft mb-4 text-center">
-              No profiles yet. Create the first account.
-            </p>
-            <button
-              onClick={() => setSelectedProfile({ id: 'new', display_name: 'New', class_name: null, theme: 'neutral', avatar_glyph: null })}
-              className="w-full p-3 rounded-lg font-medium"
-              style={{ background: 'var(--accent)', color: 'var(--surface)' }}
-            >
-              Create account
-            </button>
-          </div>
-        )}
-
-        {selectedProfile && (
-          <form onSubmit={handleSubmit} className="bg-surface border border-border rounded-lg p-5 space-y-3">
-            <div className="text-center text-sm uppercase tracking-widest mb-1" style={{ color: 'var(--ink-soft)' }}>
-              {mode === 'signin' ? 'Sign in' : 'Create new account'}
-            </div>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-3 rounded-md bg-surface-2 border border-border text-ink placeholder-ink-soft focus:outline-none focus:border-accent"
-            />
+        <form
+          onSubmit={showReset ? handlePasswordReset : handleSignIn}
+          className="bg-surface border border-border rounded-lg p-5 space-y-3"
+        >
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            className="w-full p-3 rounded-md bg-surface-2 border border-border text-ink placeholder-ink-soft focus:outline-none focus:border-accent"
+          />
+          {!showReset && (
             <input
               type="password"
               placeholder="Password"
@@ -119,36 +104,56 @@ export default function LoginClient({ profiles }: { profiles: Profile[] }) {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
+              autoComplete="current-password"
               className="w-full p-3 rounded-md bg-surface-2 border border-border text-ink placeholder-ink-soft focus:outline-none focus:border-accent"
             />
-            {error && <div className="text-sm text-danger">{error}</div>}
-            <button
-              type="submit"
-              disabled={busy}
-              className="w-full p-3 rounded-md font-medium disabled:opacity-50"
-              style={{ background: 'var(--accent)', color: 'var(--surface)' }}
-            >
-              {busy ? '…' : mode === 'signin' ? 'Sign in' : 'Create account'}
-            </button>
-            <div className="flex justify-between items-center pt-1">
+          )}
+          {error && <div className="text-sm text-danger">{error}</div>}
+          {info && <div className="text-sm" style={{ color: 'var(--success)' }}>{info}</div>}
+          <button
+            type="submit"
+            disabled={busy}
+            className="w-full p-3 rounded-md font-medium disabled:opacity-50"
+            style={{ background: 'var(--accent)', color: 'var(--surface)' }}
+          >
+            {busy ? '…' : showReset ? 'Send reset link' : 'Sign in'}
+          </button>
+          <div className="flex justify-between items-center pt-1">
+            {showReset ? (
               <button
                 type="button"
-                onClick={() => setSelectedProfile(null)}
+                onClick={() => { setShowReset(false); setError(null); setInfo(null); }}
                 className="text-sm text-ink-soft"
               >
-                ← Back
+                ← Back to sign in
               </button>
-              <button
-                type="button"
-                onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(null); }}
-                className="text-sm"
-                style={{ color: 'var(--accent)' }}
-              >
-                {mode === 'signin' ? 'New here? Sign up' : 'Have an account? Sign in'}
-              </button>
-            </div>
-          </form>
-        )}
+            ) : (
+              <>
+                <span />
+                <button
+                  type="button"
+                  onClick={() => { setShowReset(true); setError(null); setInfo(null); }}
+                  className="text-sm"
+                  style={{ color: 'var(--accent)' }}
+                >
+                  Forgot password?
+                </button>
+              </>
+            )}
+          </div>
+        </form>
+
+        <p className="text-center text-xs text-ink-soft mt-6">
+          By invitation only. Want a household?{' '}
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdwGzhiq2Zl8S1ERmltKIWYhmyAaygeMK56uMKMGjTQrGylig/viewform?usp=header"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--accent)', textDecoration: 'underline' }}
+          >
+            Request access
+          </a>
+        </p>
       </div>
     </div>
   );
