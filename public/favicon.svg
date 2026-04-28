@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Bird perched on roof favicon</title>
+  <desc id="desc">A simple black silhouette of a bird perched on a peaked roof with a chimney.</desc>
+  <g fill="#000000">
+    <!-- roof -->
+    <path d="M54 372 L256 214 L458 372 L458 421 L256 263 L54 421 Z"/>
+    <!-- chimney -->
+    <rect x="365" y="259" width="52" height="107" rx="5"/>
+    <!-- bird body -->
+    <path d="M181 234
+             C187 188 214 137 259 121
+             C293 109 332 121 349 151
+             C372 158 391 167 404 178
+             C387 187 369 191 349 191
+             C348 234 321 276 277 289
+             C236 301 196 279 181 234 Z"/>
+    <!-- tail -->
+    <path d="M192 255 L105 357 C96 367 108 381 119 374 L220 279 Z"/>
+    <!-- wing suggestion kept solid/minimal -->
+    <path d="M213 237 C236 256 267 263 301 253 C279 282 228 284 202 255 Z"/>
+    <!-- legs -->
+    <path d="M260 286 L285 342 L270 342 L248 290 Z"/>
+    <path d="M291 282 L327 339 L312 342 L276 288 Z"/>
+    <!-- feet -->
+    <path d="M264 337 C281 329 299 331 315 342 L263 342 Z"/>
+    <path d="M305 337 C323 329 340 331 355 342 L304 342 Z"/>
+  </g>
+</svg>
