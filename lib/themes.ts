@@ -13,6 +13,11 @@ export type ThemeId = 'dnd' | 'alien' | 'horror' | 'marquee' | 'cozy' | 'space' 
 export type ThemeCopy = {
   appName: string;
   home: string;              // nav label for dashboard
+  food: string;              // nav label for the merged food section
+  foodSubtitle: string;
+  stockTab: string;          // sub-tab: inventory
+  shoppingTab: string;       // sub-tab: shopping list
+  recipesTab: string;        // sub-tab: recipes
   tasks: string;             // plural for nav + headers
   task: string;              // singular
   newTask: string;           // button: "Add Task"
@@ -68,6 +73,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'Household',
       home: 'Home',
+      food: 'Food',
+      foodSubtitle: 'kitchen, list, ideas',
+      stockTab: 'Stock',
+      shoppingTab: 'Shopping',
+      recipesTab: 'Recipes',
       tasks: 'Tasks',
       task: 'Task',
       newTask: 'Add Task',
@@ -113,6 +123,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Keep',
       home: 'The Hearth',
+      food: 'Provisions',
+      foodSubtitle: 'the kitchen and the wagon',
+      stockTab: 'Larder',
+      shoppingTab: 'Wagon',
+      recipesTab: 'Recipes',
       tasks: 'Quests',
       task: 'Quest',
       newTask: 'Inscribe Quest',
@@ -158,6 +173,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'MOTHERSHIP',
       home: 'MAIN BAY',
+      food: 'GALLEY',
+      foodSubtitle: 'rations, requisitions, mess',
+      stockTab: 'STORES',
+      shoppingTab: 'REQUISITIONS',
+      recipesTab: 'MESS',
       tasks: 'Directives',
       task: 'Directive',
       newTask: 'New Directive',
@@ -203,6 +223,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Haunting',
       home: 'The Foyer',
+      food: 'The Pantry',
+      foodSubtitle: 'what we keep, what we need, what we eat',
+      stockTab: 'Stores',
+      shoppingTab: 'Errands',
+      recipesTab: 'Recipes',
       tasks: 'Rituals',
       task: 'Ritual',
       newTask: 'Inscribe Ritual',
@@ -248,6 +273,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Main Stage',
       home: 'The Overture',
+      food: 'The Banquet',
+      foodSubtitle: 'pantry, list, repertoire',
+      stockTab: 'Pantry',
+      shoppingTab: 'List',
+      recipesTab: 'Repertoire',
       tasks: 'Showstoppers',
       task: 'Showstopper',
       newTask: 'Add to Billing',
@@ -293,6 +323,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Little House',
       home: 'Home',
+      food: 'The Pantry',
+      foodSubtitle: 'cupboards, list, recipe book',
+      stockTab: 'Cupboards',
+      shoppingTab: 'List',
+      recipesTab: 'Recipes',
       tasks: 'Helpful Things',
       task: 'Helpful Thing',
       newTask: 'Add a Helpful Thing',
@@ -337,6 +372,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Observatory',
       home: 'The Bridge',
+      food: 'The Galley',
+      foodSubtitle: 'stores, manifest, recipes',
+      stockTab: 'Stores',
+      shoppingTab: 'Manifest',
+      recipesTab: 'Recipes',
       tasks: 'Missions',
       task: 'Mission',
       newTask: 'Plot a Mission',
@@ -381,6 +421,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Homestead',
       home: 'The Porch',
+      food: 'The Larder',
+      foodSubtitle: 'what we got, what we need, what we make',
+      stockTab: 'Goods',
+      shoppingTab: 'Trip',
+      recipesTab: 'Fixings',
       tasks: 'Chores',
       task: 'Chore',
       newTask: 'Post a Chore',
@@ -425,6 +470,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Homepage',
       home: 'Home Sweet Home',
+      food: 'The Snacks',
+      foodSubtitle: 'what we got, our list, our recipes',
+      stockTab: 'Stocked',
+      shoppingTab: 'Need',
+      recipesTab: 'Recipes',
       tasks: 'The List',
       task: 'Thing To Do',
       newTask: '+ ADD NEW !!',
@@ -469,6 +519,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Reef',
       home: 'The Shore',
+      food: 'The Cache',
+      foodSubtitle: 'what we have, what we need, what we make',
+      stockTab: 'Cache',
+      shoppingTab: 'Net',
+      recipesTab: 'Recipes',
       tasks: 'The Current',
       task: 'Current',
       newTask: 'Send a Current',
@@ -513,6 +568,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Bridge',
       home: 'Main Bridge',
+      food: 'STORES',
+      foodSubtitle: 'inventory, requisitions, replicator',
+      stockTab: 'INVENTORY',
+      shoppingTab: 'REQUISITIONS',
+      recipesTab: 'REPLICATOR',
       tasks: 'Away Missions',
       task: 'Away Mission',
       newTask: 'Log New Mission',
@@ -557,6 +617,11 @@ export const THEMES: Record<ThemeId, { id: ThemeId; label: string; copy: ThemeCo
     copy: {
       appName: 'The Dreamhouse',
       home: 'Home',
+      food: 'Kitchen, hun',
+      foodSubtitle: 'closet, haul, menu',
+      stockTab: 'Closet',
+      shoppingTab: 'Haul',
+      recipesTab: 'Menu',
       tasks: 'Plans',
       task: 'Plan',
       newTask: 'Add a plan, babe',
