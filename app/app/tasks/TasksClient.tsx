@@ -13,6 +13,7 @@ export default function TasksClient({ initialTasks, members }: { initialTasks: T
   const [tasks, setTasks] = useState<TaskRow[]>(initialTasks);
   const [filter, setFilter] = useState<'all' | 'mine' | 'open' | 'urgent' | 'done'>('open');
   const [showAdd, setShowAdd] = useState(false);
+  const [editingTask, setEditingTask] = useState<TaskRow | null>(null);
 
   // Realtime: listen for task changes and re-fetch
   useEffect(() => {
@@ -38,24 +39,77 @@ export default function TasksClient({ initialTasks, members }: { initialTasks: T
     return true;
   });
 
-  async function completeTask(t: TaskRow) {
+  // Complete a task. completedById defaults to current user, but can be set
+  // to anyone in the household — useful for tracking work for a housemate
+  // who isn't using the app yet.
+  async function completeTask(t: TaskRow, completedById?: string) {
+    const completer = completedById ?? profile.id;
+    const completerProfile = members.find((m) => m.id === completer);
     const { error } = await supabase
       .from('tasks')
-      .update({ completed_at: new Date().toISOString(), completed_by: profile.id } as any)
+      .update({ completed_at: new Date().toISOString(), completed_by: completer } as any)
       .eq('id', t.id);
     if (error) { toast(error.message); return; }
 
-    // Award XP/gold to completer
-    const newXp = profile.xp + (t.xp_reward || 0);
-    const newGold = Math.round((profile.gold + Number(t.gold_reward || 0)) * 100) / 100;
-    const newLevel = Math.floor(newXp / 400) + 1;
-    await supabase
-      .from('profiles')
-      .update({ xp: newXp, gold: newGold, level: newLevel } as any)
-      .eq('id', profile.id);
-
-    toast(theme.copy.completedToast(t.xp_reward || 0, Number(t.gold_reward || 0)));
+    // XP/gold goes to whoever did the work
+    if (completer === profile.id) {
+      const newXp = profile.xp + (t.xp_reward || 0);
+      const newGold = Math.round((profile.gold + Number(t.gold_reward || 0)) * 100) / 100;
+      const newLevel = Math.floor(newXp / 400) + 1;
+      await supabase
+        .from('profiles')
+        .update({ xp: newXp, gold: newGold, level: newLevel } as any)
+        .eq('id', profile.id);
+      toast(theme.copy.completedToast(t.xp_reward || 0, Number(t.gold_reward || 0)));
+    } else {
+      // Fetch the other person's profile and award XP/gold there
+      const { data: them } = await supabase
+        .from('profiles')
+        .select('xp, gold')
+        .eq('id', completer)
+        .maybeSingle();
+      if (them) {
+        const newXp = (them.xp ?? 0) + (t.xp_reward || 0);
+        const newGold = Math.round(((them.gold ?? 0) + Number(t.gold_reward || 0)) * 100) / 100;
+        const newLevel = Math.floor(newXp / 400) + 1;
+        await supabase
+          .from('profiles')
+          .update({ xp: newXp, gold: newGold, level: newLevel } as any)
+          .eq('id', completer);
+      }
+      toast(`Logged for ${completerProfile?.display_name ?? 'them'}`);
+    }
     refresh();
+  }
+
+  // Save edits to an existing task
+  async function saveTaskEdits(t: TaskRow, updates: Partial<TaskRow>) {
+    const { error } = await supabase
+      .from('tasks')
+      .update(updates as any)
+      .eq('id', t.id);
+    if (error) { toast(error.message); return; }
+    toast('Saved');
+    setEditingTask(null);
+  }
+
+  // Reopen a completed task (clear completed_at)
+  async function reopenTask(t: TaskRow) {
+    const { error } = await supabase
+      .from('tasks')
+      .update({ completed_at: null, completed_by: null } as any)
+      .eq('id', t.id);
+    if (error) { toast(error.message); return; }
+    toast('Reopened');
+    setEditingTask(null);
+  }
+
+  // Delete a task
+  async function deleteTask(t: TaskRow) {
+    const { error } = await supabase.from('tasks').delete().eq('id', t.id);
+    if (error) { toast(error.message); return; }
+    toast('Removed');
+    setEditingTask(null);
   }
 
   async function createTask(form: FormData) {
@@ -87,7 +141,12 @@ export default function TasksClient({ initialTasks, members }: { initialTasks: T
       ) : (
         <div className="space-y-3">
           {shown.map((t) => (
-            <TaskCard key={t.id} task={t} onComplete={() => completeTask(t)} />
+            <TaskCard
+              key={t.id}
+              task={t}
+              onComplete={() => completeTask(t)}
+              onEdit={() => setEditingTask(t)}
+            />
           ))}
         </div>
       )}
@@ -110,6 +169,19 @@ export default function TasksClient({ initialTasks, members }: { initialTasks: T
           members={members}
           onClose={() => setShowAdd(false)}
           onSubmit={createTask}
+        />
+      )}
+
+      {editingTask && (
+        <EditTaskModal
+          task={editingTask}
+          members={members}
+          currentUserId={profile.id}
+          onClose={() => setEditingTask(null)}
+          onSave={(updates) => saveTaskEdits(editingTask, updates)}
+          onComplete={(byId) => completeTask(editingTask, byId)}
+          onReopen={() => reopenTask(editingTask)}
+          onDelete={() => deleteTask(editingTask)}
         />
       )}
     </div>
@@ -157,7 +229,7 @@ function FilterChips({
   );
 }
 
-function TaskCard({ task, onComplete }: { task: TaskRow; onComplete: () => void }) {
+function TaskCard({ task, onComplete, onEdit }: { task: TaskRow; onComplete: () => void; onEdit: () => void }) {
   const { theme } = useApp();
   const done = !!task.completed_at;
   const urgent = task.tier === 'urgent' && !done;
@@ -173,7 +245,17 @@ function TaskCard({ task, onComplete }: { task: TaskRow; onComplete: () => void 
         borderRadius: 'var(--radius-lg)',
       }}
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
+      <button
+        onClick={onEdit}
+        className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center text-xs"
+        style={{ color: 'var(--ink-soft)' }}
+        aria-label="Edit task"
+        title="Edit"
+      >
+        ⚙
+      </button>
+
+      <div className="flex items-start justify-between gap-2 mb-2 pr-7">
         <h3
           className="font-semibold flex-1 display"
           style={{
@@ -342,5 +424,199 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="block text-[11px] uppercase tracking-wider mb-1" style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>{label}</span>
       {children}
     </label>
+  );
+}
+
+function EditTaskModal({
+  task, members, currentUserId, onClose, onSave, onComplete, onReopen, onDelete,
+}: {
+  task: TaskRow;
+  members: Member[];
+  currentUserId: string;
+  onClose: () => void;
+  onSave: (updates: Partial<TaskRow>) => void;
+  onComplete: (byId: string) => void;
+  onReopen: () => void;
+  onDelete: () => void;
+}) {
+  const { theme } = useApp();
+  const [title, setTitle] = useState(task.title || '');
+  const [description, setDescription] = useState(task.description || '');
+  const [tier, setTier] = useState<string>(task.tier);
+  const [assigneeId, setAssigneeId] = useState<string>(task.assignee_id || '');
+  const [completedById, setCompletedById] = useState<string>(currentUserId);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const done = !!task.completed_at;
+
+  return (
+    <div
+      className="fixed inset-0 flex items-end sm:items-center justify-center z-30 p-4"
+      style={{ background: 'rgba(0,0,0,0.6)' }}
+      onClick={onClose}
+    >
+      <form
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSave({
+            title: title.trim(),
+            description: description.trim(),
+            tier: tier as any,
+            assignee_id: assigneeId || null,
+          });
+        }}
+        className="w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto"
+        style={{
+          background: 'var(--surface)',
+          border: '2px solid var(--accent-2)',
+          borderRadius: 'var(--radius-lg)',
+        }}
+      >
+        <h3 className="display text-lg font-bold text-center" style={{ color: 'var(--accent)' }}>
+          Edit {theme.copy.task}
+        </h3>
+
+        <Field label="Title">
+          <input value={title} onChange={(e) => setTitle(e.target.value)} required className="inp" />
+        </Field>
+
+        <Field label="Description">
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="inp" rows={2} />
+        </Field>
+
+        <div className="grid grid-cols-2 gap-2">
+          <Field label="Tier">
+            <select value={tier} onChange={(e) => setTier(e.target.value)} className="inp">
+              <option value="common">{theme.copy.tiers.common}</option>
+              <option value="rare">{theme.copy.tiers.rare}</option>
+              <option value="epic">{theme.copy.tiers.epic}</option>
+              <option value="urgent">{theme.copy.tiers.urgent}</option>
+            </select>
+          </Field>
+          <Field label="Assignee">
+            <select value={assigneeId} onChange={(e) => setAssigneeId(e.target.value)} className="inp">
+              <option value="">Unassigned</option>
+              {members.map((m) => (
+                <option key={m.id} value={m.id}>{m.display_name}</option>
+              ))}
+            </select>
+          </Field>
+        </div>
+
+        <div className="flex gap-2 pt-1">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 py-2 text-sm uppercase tracking-wider"
+            style={{ color: 'var(--ink-soft)', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="flex-1 py-2 text-sm uppercase tracking-wider font-semibold"
+            style={{ background: 'var(--accent)', color: 'var(--surface)', borderRadius: 'var(--radius)' }}
+          >
+            Save
+          </button>
+        </div>
+
+        {/* Complete-on-behalf-of section: only when task isn't done yet */}
+        {!done && (
+          <div
+            className="pt-3 mt-2"
+            style={{ borderTop: '1px dotted var(--border)' }}
+          >
+            <div className="text-[10px] uppercase tracking-widest mb-1.5" style={{ color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>
+              Mark complete
+            </div>
+            <div className="flex gap-2">
+              <select
+                value={completedById}
+                onChange={(e) => setCompletedById(e.target.value)}
+                className="inp flex-1"
+              >
+                {members.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.id === currentUserId ? `${m.display_name} (you)` : m.display_name}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() => onComplete(completedById)}
+                className="px-4 py-2 text-xs uppercase tracking-wider font-semibold whitespace-nowrap"
+                style={{ background: 'var(--success)', color: 'var(--surface)', borderRadius: 'var(--radius)' }}
+              >
+                {theme.copy.completeTask}
+              </button>
+            </div>
+            <div className="text-[10px] italic mt-1" style={{ color: 'var(--ink-soft)' }}>
+              {completedById === currentUserId
+                ? 'XP and gold goes to you.'
+                : 'XP and gold goes to them.'}
+            </div>
+          </div>
+        )}
+
+        {/* Reopen / Delete actions */}
+        <div className="pt-3 mt-2 flex gap-2" style={{ borderTop: '1px dotted var(--border)' }}>
+          {done && (
+            <button
+              type="button"
+              onClick={onReopen}
+              className="flex-1 py-2 text-xs uppercase tracking-wider"
+              style={{ color: 'var(--accent-2)', border: '1px solid var(--accent-2)', borderRadius: 'var(--radius)' }}
+            >
+              Reopen
+            </button>
+          )}
+          {confirmDelete ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                className="flex-1 py-2 text-xs uppercase tracking-wider"
+                style={{ color: 'var(--ink-soft)', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={onDelete}
+                className="flex-1 py-2 text-xs uppercase tracking-wider font-semibold"
+                style={{ background: 'var(--danger)', color: 'var(--surface)', borderRadius: 'var(--radius)' }}
+              >
+                Confirm delete
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmDelete(true)}
+              className="flex-1 py-2 text-xs uppercase tracking-wider"
+              style={{ color: 'var(--danger)', border: '1px solid var(--danger)', borderRadius: 'var(--radius)' }}
+            >
+              Delete
+            </button>
+          )}
+        </div>
+
+        <style jsx>{`
+          .inp {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--ink);
+            font-family: var(--font-body);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+          }
+          .inp:focus { outline: none; border-color: var(--accent); }
+        `}</style>
+      </form>
+    </div>
   );
 }
