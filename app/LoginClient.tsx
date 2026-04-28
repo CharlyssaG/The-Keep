@@ -101,23 +101,8 @@ export default function LoginClient({ profiles }: { profiles: Profile[] }) {
 
         {selectedProfile && (
           <form onSubmit={handleSubmit} className="bg-surface border border-border rounded-lg p-5 space-y-3">
-            <div className="flex gap-2 mb-2">
-              <button
-                type="button"
-                onClick={() => setMode('signin')}
-                className={`flex-1 py-2 text-sm rounded-md ${mode === 'signin' ? 'font-semibold' : 'text-ink-soft'}`}
-                style={mode === 'signin' ? { background: 'var(--surface-2)' } : {}}
-              >
-                Sign in
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode('signup')}
-                className={`flex-1 py-2 text-sm rounded-md ${mode === 'signup' ? 'font-semibold' : 'text-ink-soft'}`}
-                style={mode === 'signup' ? { background: 'var(--surface-2)' } : {}}
-              >
-                Sign up
-              </button>
+            <div className="text-center text-sm uppercase tracking-widest mb-1" style={{ color: 'var(--ink-soft)' }}>
+              {mode === 'signin' ? 'Sign in' : 'Create new account'}
             </div>
             <input
               type="email"
@@ -145,13 +130,23 @@ export default function LoginClient({ profiles }: { profiles: Profile[] }) {
             >
               {busy ? '…' : mode === 'signin' ? 'Sign in' : 'Create account'}
             </button>
-            <button
-              type="button"
-              onClick={() => setSelectedProfile(null)}
-              className="w-full text-sm text-ink-soft py-1"
-            >
-              ← Back to profiles
-            </button>
+            <div className="flex justify-between items-center pt-1">
+              <button
+                type="button"
+                onClick={() => setSelectedProfile(null)}
+                className="text-sm text-ink-soft"
+              >
+                ← Back
+              </button>
+              <button
+                type="button"
+                onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(null); }}
+                className="text-sm"
+                style={{ color: 'var(--accent)' }}
+              >
+                {mode === 'signin' ? 'New here? Sign up' : 'Have an account? Sign in'}
+              </button>
+            </div>
           </form>
         )}
       </div>
