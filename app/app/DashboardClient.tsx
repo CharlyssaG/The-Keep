@@ -332,7 +332,7 @@ export default function DashboardClient({
               Needs restocking
             </div>
             <Link
-              href="/app/kitchen"
+              href="/app/food"
               className="text-[10px] uppercase tracking-wider"
               style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}
             >
