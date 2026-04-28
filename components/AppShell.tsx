@@ -74,9 +74,7 @@ export default function AppShell({
   const navItems = [
     { href: '/app',               label: theme.copy.home,          icon: homeIcon(profile.theme) },
     { href: '/app/tasks',         label: theme.copy.tasks,         icon: tasksIcon(profile.theme) },
-    { href: '/app/kitchen',       label: theme.copy.inventory,     icon: kitchenIcon(profile.theme) },
-    { href: '/app/shopping',      label: theme.copy.shopping,      icon: shoppingIcon(profile.theme) },
-    { href: '/app/recipes',       label: theme.copy.recipes,       icon: recipesIcon(profile.theme) },
+    { href: '/app/food',          label: theme.copy.food,          icon: foodIcon(profile.theme) },
     { href: '/app/notifications', label: theme.copy.notifications, icon: notifIcon(profile.theme) },
   ];
 
@@ -189,6 +187,9 @@ function Header({ profile, theme }: { profile: Profile; theme: ReturnType<typeof
 type IconSet = Partial<Record<ThemeId, string>>;
 const HOME_ICONS:     IconSet = { dnd: '◈', alien: '◎', horror: '♰', marquee: '❖', cozy: '🏡', space: '◯', oldwest: '✧', nineties: '✦', underwater: '🌸', station: '⧫', barbie: '♡' };
 const TASKS_ICONS:    IconSet = { dnd: '⚔', alien: '◈', horror: '†', marquee: '★', cozy: '✦', space: '✦', oldwest: '★', nineties: '✪', underwater: '❀', station: '⋆', barbie: '✿' };
+// Food icon: the unified Stock/Shopping/Recipes section. Picked themed icons
+// that read more "kitchen/pantry/feast" than just "shopping cart".
+const FOOD_ICONS:     IconSet = { dnd: '🍖', alien: '◉', horror: '🕯', marquee: '🍽', cozy: '🍯', space: '◉', oldwest: '🥩', nineties: '🍕', underwater: '🐚', station: '◉', barbie: '🍰' };
 const KITCHEN_ICONS:  IconSet = { dnd: '⚱', alien: '▣', horror: '🕯', marquee: '♛', cozy: '🍯', space: '◉', oldwest: '🏺', nineties: '▣', underwater: '🐚', station: '◉', barbie: '🎀' };
 const SHOPPING_ICONS: IconSet = { dnd: '⚖', alien: '⊞', horror: '☗', marquee: '🎭', cozy: '🧺', space: '⊕', oldwest: '🛒', nineties: '✚', underwater: '🪸', station: '⊕', barbie: '👛' };
 const RECIPE_ICONS:   IconSet = { dnd: '📜', alien: '◐', horror: '✦', marquee: '♬', cozy: '📖', space: '◎', oldwest: '📜', nineties: '❖', underwater: '🌿', station: '◎', barbie: '💄' };
@@ -196,6 +197,7 @@ const NOTIF_ICONS:    IconSet = { dnd: '✦', alien: '⟐', horror: '◈', marqu
 
 function homeIcon(t: string)     { return HOME_ICONS[t as ThemeId]     ?? '◈'; }
 function tasksIcon(t: string)    { return TASKS_ICONS[t as ThemeId]    ?? '✓'; }
+function foodIcon(t: string)     { return FOOD_ICONS[t as ThemeId]     ?? '🍴'; }
 function kitchenIcon(t: string)  { return KITCHEN_ICONS[t as ThemeId]  ?? '◉'; }
 function shoppingIcon(t: string) { return SHOPPING_ICONS[t as ThemeId] ?? '🛒'; }
 function recipesIcon(t: string)  { return RECIPE_ICONS[t as ThemeId]   ?? '❖'; }
